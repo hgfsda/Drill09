@@ -47,6 +47,11 @@ class AutoRun:
     @staticmethod
     def do(boy):
         boy.frame = (boy.frame + 1) % 8
+        boy.x += boy.dir * 4
+        if boy.x > 770:
+            boy.action, boy.dir = 0, -1
+        if boy.x < 30:
+            boy.action, boy.dir = 1, 1
         if get_time() - boy.start_time > 5:
             boy.state_machine.handle_event(('TIME_OUT', 0))
         pass
