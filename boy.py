@@ -1,6 +1,4 @@
 # 이것은 각 상태들을 객체로 구현한 것임.
-import math
-
 from pico2d import load_image, get_time
 from sdl2 import SDL_KEYDOWN, SDL_KEYUP, SDLK_RIGHT, SDLK_LEFT, SDLK_a
 
@@ -33,13 +31,14 @@ class AutoRun:
 
     @staticmethod
     def enter(boy, e):
-        boy.frame = 0
         if boy.action == 2:
             boy.action = 0
             boy.dir = -1
         elif boy.action == 3:
             boy.action = 1
             boy.dir = 1
+        boy.frame = 0
+        boy.start_time = get_time()
 
     @staticmethod
     def exit(boy, e):
@@ -48,6 +47,8 @@ class AutoRun:
     @staticmethod
     def do(boy):
         boy.frame = (boy.frame + 1) % 8
+        if get_time() - boy.start_time > 5:
+            boy.state_machine.handle_event(('TIME_OUT', 0))
         pass
 
     @staticmethod
@@ -111,7 +112,7 @@ class StateMachine:
         self.table = {
             Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run, autorun_key: AutoRun},
             Run: {right_down: Idle, left_down: Idle, left_up: Idle, right_up: Idle},
-            AutoRun: {}
+            AutoRun: {time_out: Idle}
         }
 
     def start(self):
