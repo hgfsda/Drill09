@@ -25,6 +25,26 @@ def left_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_LEFT
 
 
+class AutoRun:
+
+    @staticmethod
+    def enter(boy, e):
+        boy.frame = 0
+
+    @staticmethod
+    def exit(boy, e):
+        pass
+
+    @staticmethod
+    def do(boy):
+        boy.frame = (boy.frame + 1) % 8
+        pass
+
+    @staticmethod
+    def draw(boy):
+        boy.image.clip_draw(boy.frame * 100, boy.action * 100, 100, 100, boy.x, boy.y+20, 150, 150)
+
+
 class Run:
 
     @staticmethod
@@ -77,10 +97,11 @@ class Idle:
 class StateMachine:
     def __init__(self, boy):
         self.boy = boy
-        self.cur_state = Idle
+        self.cur_state = AutoRun
         self.table = {
             Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run},
-            Run: {right_down: Idle, left_down: Idle, left_up: Idle, right_up: Idle}
+            Run: {right_down: Idle, left_down: Idle, left_up: Idle, right_up: Idle},
+            AutoRun: {}
         }
 
     def start(self):
