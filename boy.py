@@ -47,7 +47,7 @@ class AutoRun:
     @staticmethod
     def do(boy):
         boy.frame = (boy.frame + 1) % 8
-        boy.x += boy.dir * 4
+        boy.x += boy.dir * 6
         if boy.x > 770:
             boy.action, boy.dir = 0, -1
         if boy.x < 30:
@@ -117,7 +117,7 @@ class StateMachine:
         self.table = {
             Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run, autorun_key: AutoRun},
             Run: {right_down: Idle, left_down: Idle, left_up: Idle, right_up: Idle},
-            AutoRun: {time_out: Idle}
+            AutoRun: {right_down: Run, left_down: Run, left_up: Run, right_up: Run, time_out: Idle}
         }
 
     def start(self):
