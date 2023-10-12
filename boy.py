@@ -2,11 +2,15 @@
 import math
 
 from pico2d import load_image, get_time
-from sdl2 import SDL_KEYDOWN, SDLK_RIGHT, SDLK_LEFT, SDL_KEYUP
+from sdl2 import SDL_KEYDOWN, SDL_KEYUP, SDLK_RIGHT, SDLK_LEFT, SDLK_a
 
 
 def time_out(e):
     return e[0] == 'TIME_OUT'
+
+
+def autorun_key(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_a
 
 
 def right_down(e):
@@ -97,9 +101,9 @@ class Idle:
 class StateMachine:
     def __init__(self, boy):
         self.boy = boy
-        self.cur_state = AutoRun
+        self.cur_state = Idle
         self.table = {
-            Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run},
+            Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run, autorun_key: AutoRun},
             Run: {right_down: Idle, left_down: Idle, left_up: Idle, right_up: Idle},
             AutoRun: {}
         }
