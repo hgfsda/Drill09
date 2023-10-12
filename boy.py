@@ -34,6 +34,12 @@ class AutoRun:
     @staticmethod
     def enter(boy, e):
         boy.frame = 0
+        if boy.action == 2:
+            boy.action = 0
+            boy.dir = -1
+        elif boy.action == 3:
+            boy.action = 1
+            boy.dir = 1
 
     @staticmethod
     def exit(boy, e):
